@@ -16,16 +16,4 @@ Route::get('/', function()
 	return View::make('hello');
 });
 
-Route::get('/filial', function()
-{
-	$filial = Filial::all();
-
-	return $filial;
-});
-
-Route::get('/aluno', function()
-{
-	$aluno = Aluno::all();
-
-	return $aluno;
-});
+Route::resource('alunos', 'AlunosController');
