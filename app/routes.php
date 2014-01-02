@@ -15,3 +15,9 @@ Route::get('/', function()
 {
 	return View::make('hello');
 });
+
+Route::resource('students', 'StudentsController');
+
+Route::resource('affiliates', 'AffiliatesController');
+
+Route::resource('languages', 'LanguagesController');
