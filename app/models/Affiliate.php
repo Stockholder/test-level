@@ -6,4 +6,9 @@ class Affiliate extends Eloquent {
 	public static $rules = array(
 		'city' => 'required'
 	);
+
+	public function test()
+	{
+		return hasMany('Test', 'affiliate_id');
+	}
 }

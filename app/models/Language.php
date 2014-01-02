@@ -6,4 +6,9 @@ class Language extends Eloquent {
 	public static $rules = array(
 		'language' => 'required'
 	);
+
+	public function test()
+	{
+		return hasMany('Test', 'language_id');
+	}
 }
