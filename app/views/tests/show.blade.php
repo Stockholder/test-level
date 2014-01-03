@@ -21,7 +21,13 @@
 			<td>{{{ $test->description }}}</td>
 					<td>{{{ Language::find($test->languages_id)->language }}}</td>
 					<td>{{{ Affiliate::find($test->affiliates_id)->city }}}</td>
-					<td>{{{ $test->active }}}</td>
+					<td>
+						@if ($test->active == 1)
+							<span class="label label-success">Ativo</span>
+						@else
+							<span class="label label-danger">Inativo</span>
+						@endif
+					</td>
                     <td>{{ link_to_route('tests.edit', 'Edit', array($test->id), array('class' => 'btn btn-info')) }}</td>
                     <td>
                         {{ Form::open(array('method' => 'DELETE', 'route' => array('tests.destroy', $test->id))) }}
