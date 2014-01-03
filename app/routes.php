@@ -23,3 +23,5 @@ Route::resource('affiliates', 'AffiliatesController');
 Route::resource('languages', 'LanguagesController');
 
 Route::resource('tests', 'TestsController');
+
+Route::resource('questions', 'QuestionsController');
