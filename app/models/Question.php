@@ -7,4 +7,9 @@ class Question extends Eloquent {
 		'description' => 'required',
 		'audio_id' => 'required'
 	);
+
+    public function alternatives()
+    {
+        return $this->belongsToMany('Alternative', 'alternative_question');
+    }
 }

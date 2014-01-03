@@ -21,6 +21,13 @@ class QuestionsController extends BaseController {
 	 */
 	public function index()
 	{
+		// $role = new Alternative(array('description' => 'alternativa 10'));
+		// $question = Question::find(1);
+		// $question->alternatives()->save($role);
+
+		// $question = Question::find(1);
+		// $question->alternatives()->insert(array('description' => 'alternativa 8'));
+		// $question->alternatives()->attach(DB::getPdo()->lastInsertId());
 		$questions = $this->question->all();
 
 		return View::make('questions.index', compact('questions'));

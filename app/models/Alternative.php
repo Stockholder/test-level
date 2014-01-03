@@ -6,4 +6,9 @@ class Alternative extends Eloquent {
 	public static $rules = array(
 		'description' => 'required'
 	);
+
+    public function questions()
+    {
+        return $this->belongsToMany('Question', 'alternative_question');
+    }
 }
