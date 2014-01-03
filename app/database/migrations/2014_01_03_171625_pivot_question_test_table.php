@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class PivotAlternativeQuestionTable extends Migration {
+class PivotQuestionTestTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,13 +12,12 @@ class PivotAlternativeQuestionTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('alternative_question', function(Blueprint $table) {
+		Schema::create('question_test', function(Blueprint $table) {
 			$table->increments('id');
-			$table->integer('alternative_id')->unsigned()->index();
 			$table->integer('question_id')->unsigned()->index();
-			$table->foreign('alternative_id')->references('id')->on('alternatives')->onDelete('cascade');
+			$table->integer('test_id')->unsigned()->index();
 			$table->foreign('question_id')->references('id')->on('questions')->onDelete('cascade');
-			$table->boolean('correct')->default(0);
+			$table->foreign('test_id')->references('id')->on('tests')->onDelete('cascade');
 		});
 	}
 
@@ -31,7 +30,7 @@ class PivotAlternativeQuestionTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('alternative_question');
+		Schema::drop('question_test');
 	}
 
 }

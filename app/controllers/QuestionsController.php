@@ -57,13 +57,15 @@ class QuestionsController extends BaseController {
 		{
 			$this->question->create($input);
 
-			return Redirect::route('questions.index');
+			// return Redirect::route('questions.index');
+			return Response::json($input, 200);
 		}
-
-		return Redirect::route('questions.create')
-			->withInput()
-			->withErrors($validation)
-			->with('message', 'There were validation errors.');
+		$messages = $validation->errors()->toArray();
+		return Response::json($messages, 400);
+		// return Redirect::route('questions.create')
+		// 	->withInput()
+		// 	->withErrors($validation)
+		// 	->with('message', 'There were validation errors.');
 	}
 
 	/**
