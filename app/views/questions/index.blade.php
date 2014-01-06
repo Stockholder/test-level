@@ -1,13 +1,9 @@
-@extends('layouts.scaffold')
+@extends('layouts.alternate')
 
 @section('main')
 
-<h1>All Questions</h1>
-
-<p>{{ link_to_route('questions.create', 'Add new question') }}</p>
-
 @if ($questions->count())
-	<table class="table table-striped table-bordered">
+	<table class="table table-striped table-bordered loadedContent">
 		<thead>
 			<tr>
 				<th>Description</th>

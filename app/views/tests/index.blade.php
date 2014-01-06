@@ -33,6 +33,7 @@
 					</td>
 					<td>
 						<a href="#myModal" role="button" class="btn" data-toggle="modal">Adicionar questões</a>
+						<a class="btn showQuestions">Mostrar questões</a>
 					</td>
 					<td>{{ link_to_route('tests.edit', 'Edit', array($test->id), array('class' => 'btn btn-info')) }}</td>
 					<td>
@@ -40,6 +41,9 @@
 							{{ Form::submit('Delete', array('class' => 'btn btn-danger')) }}
 						{{ Form::close() }}
 					</td>
+				</tr>
+				<tr>
+					<td class="loadQuestions" colspan="7" style="display:none;"></td>
 				</tr>
 			@endforeach
 		</tbody>
@@ -50,6 +54,35 @@
 
 <script>
 	$(function () {
+		//Show questions
+		$('.showQuestions').click(function(){
+			if($('.loadQuestions').is(':visible')){
+				$('.loadQuestions').hide();
+				$('.showQuestions').html('Mostrar questões');
+			}else{
+				$('.showQuestions').html('Ocultar questões');
+				$('.loadQuestions').html('');
+				$('.loadQuestions').append($('<div style="text-align:center"><img src="http://ri.magazineluiza.com.br/rao2012/images/loader.gif" width="100" height="100"/></div>'));
+				setTimeout(function(){
+					$('.loadQuestions').load('http://test-level:8080/questions');
+				},1000);
+				
+				$('.loadQuestions').show();
+			}
+		});
+
+		//Modal
+		$('#myModal').on('shown', function() {
+			// console.log('a');
+		});
+
+		$('#myModal').on('hidden', function() {
+			$('#myModal').modal('hide');
+			$('#errors').html('');
+			$('#formQuestion')[0].reset();
+		});
+
+		//Save questions
 		$("#saveQuestion").bind('click',function () {
 			var form = $('#formQuestion');
 			var data = form.serialize();
@@ -61,24 +94,32 @@
 				url: url,
 				data: data
 			}).success(function(s) {
-				console.log('success:',s);
+				$('#myModal').modal('toggle');
+				$('.showQuestions').html('Ocultar questões');
+				$('.loadQuestions').html('');
+				$('.loadQuestions').append($('<div style="text-align:center"><img src="http://ri.magazineluiza.com.br/rao2012/images/loader.gif" width="100" height="100"/></div>'));
+				setTimeout(function(){
+					$('.loadQuestions').load('http://test-level:8080/questions');
+				},1000);
+				
+				$('.loadQuestions').show();
 			}).error(function(e) {
 				if(e.status != 400){
 					alert('Ocorreu um erro interno, favor consultar o administrador');
 				}else{
+					$('#errors').html('');
 					var errorMessage = JSON.parse(e.responseText);
 					var errorPlace = document.createElement('ul');
 					errorPlace = $(errorPlace).addClass('errorPlace');
 					$.each(errorMessage, function(index, val) {
 						$('#errors').append('<li class="error">'+val+'</li>');
 					});
-					errorPlace.after($('#formQuestion'));
 				}
 			}).done(function( data ) {
-				console.log('done',data);
+				// console.log('done',data);
   			})
-
 		});
+
 	});
 </script>
 
@@ -103,6 +144,7 @@
 					</li>
 				</ul>
 			{{ Form::close() }}
+			<ul id="errors"></ul>
 		</p>
 	</div>
 	<div class="modal-footer">
