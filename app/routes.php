@@ -27,3 +27,10 @@ Route::resource('tests', 'TestsController');
 Route::resource('questions', 'QuestionsController');
 
 Route::resource('alternatives', 'AlternativesController');
+
+Route::get('questions/showByTest/{id}', function($id)
+{
+	$test =Test::find($id);
+	$questions = $test->questions;
+	return View::make('questions.index', compact('questions'));
+});

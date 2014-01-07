@@ -7,19 +7,20 @@
 <p>{{ link_to_route('tests.create', 'Add new test') }}</p>
 
 @if ($tests->count())
-	<table class="table table-striped table-bordered">
-		<thead>
-			<tr>
-				<th>Description</th>
-				<th>Languages_id</th>
-				<th>Affiliates_id</th>
-				<th>Active</th>
-				<th align="center">Actions</th>
-			</tr>
-		</thead>
 
-		<tbody>
-			@foreach ($tests as $test)
+	@foreach ($tests as $test)
+		<table class="table table-striped table-bordered">
+			<thead>
+				<tr>
+					<th>Description</th>
+					<th>Languages_id</th>
+					<th>Affiliates_id</th>
+					<th>Active</th>
+					<th align="center">Actions</th>
+				</tr>
+			</thead>
+
+			<tbody>
 				<tr>
 					<td>{{{ $test->description }}}</td>
 					<td>{{{ Language::find($test->languages_id)->language }}}</td>
@@ -32,8 +33,8 @@
 						@endif
 					</td>
 					<td>
-						<a href="#myModal" role="button" class="btn" data-toggle="modal">Adicionar questões</a>
-						<a class="btn showQuestions">Mostrar questões</a>
+						<a href="#myModal" role="button" class="btn addQuestion" data-toggle="modal" data-id="{{ $test->id }}">Adicionar questões</a>
+						<a class="btn showQuestions" data-id="{{ $test->id }}">Mostrar questões</a>
 					</td>
 					<td>{{ link_to_route('tests.edit', 'Edit', array($test->id), array('class' => 'btn btn-info')) }}</td>
 					<td>
@@ -43,11 +44,12 @@
 					</td>
 				</tr>
 				<tr>
-					<td class="loadQuestions" colspan="7" style="display:none;"></td>
+					<td class="loadQuestions" data-id="{{ $test->id }}" colspan="7" style="display:none;"></td>
 				</tr>
-			@endforeach
-		</tbody>
-	</table>
+			</tbody>
+		</table>
+	@endforeach
+
 @else
 	There are no tests
 @endif
@@ -56,24 +58,31 @@
 	$(function () {
 		//Show questions
 		$('.showQuestions').click(function(){
-			if($('.loadQuestions').is(':visible')){
-				$('.loadQuestions').hide();
-				$('.showQuestions').html('Mostrar questões');
+			var test_id = $(this).data('id');
+			var loadQuestions = $('.loadQuestions[data-id="'+test_id+'"]');
+			if(loadQuestions.is(':visible')){
+				loadQuestions.hide();
+				$(this).html('Mostrar questões');
 			}else{
-				$('.showQuestions').html('Ocultar questões');
-				$('.loadQuestions').html('');
-				$('.loadQuestions').append($('<div style="text-align:center"><img src="http://ri.magazineluiza.com.br/rao2012/images/loader.gif" width="100" height="100"/></div>'));
+				$(this).html('Ocultar questões');
+				loadQuestions.html('');
+				loadQuestions.append($('<div style="text-align:center"><img src="http://ri.magazineluiza.com.br/rao2012/images/loader.gif" width="100" height="100"/></div>'));
 				setTimeout(function(){
-					$('.loadQuestions').load('http://test-level:8080/questions');
+					loadQuestions.load('{{ URL::to('/'); }}/questions/showByTest/'+test_id);
 				},1000);
 				
-				$('.loadQuestions').show();
+				loadQuestions.show();
 			}
+		});
+
+		$('.addQuestion').click(function(event) {
+			var test_id = $(this).data('id');
+			$('#myModal').data('id', test_id);
 		});
 
 		//Modal
 		$('#myModal').on('shown', function() {
-			// console.log('a');
+
 		});
 
 		$('#myModal').on('hidden', function() {
@@ -88,21 +97,25 @@
 			var data = form.serialize();
 			var method = form.attr('method');
 			var url = form.attr('action');
+			var test_id = $('#myModal').data('id');
+			var loadQuestions = $('.loadQuestions[data-id="'+test_id+'"]');
 
+			data = data+'&test_id='+test_id;
+			
 			$.ajax({
 				type: method,
 				url: url,
 				data: data
 			}).success(function(s) {
 				$('#myModal').modal('toggle');
-				$('.showQuestions').html('Ocultar questões');
-				$('.loadQuestions').html('');
-				$('.loadQuestions').append($('<div style="text-align:center"><img src="http://ri.magazineluiza.com.br/rao2012/images/loader.gif" width="100" height="100"/></div>'));
+				$('.showQuestions[data-id="'+test_id+'"]').html('Ocultar questões');
+				loadQuestions.html('');
+				loadQuestions.append($('<div style="text-align:center"><img src="http://ri.magazineluiza.com.br/rao2012/images/loader.gif" width="100" height="100"/></div>'));
 				setTimeout(function(){
-					$('.loadQuestions').load('http://test-level:8080/questions');
+					loadQuestions.load('{{ URL::to('/'); }}/questions/showByTest/'+test_id);
 				},1000);
 				
-				$('.loadQuestions').show();
+				loadQuestions.show();
 			}).error(function(e) {
 				if(e.status != 400){
 					alert('Ocorreu um erro interno, favor consultar o administrador');

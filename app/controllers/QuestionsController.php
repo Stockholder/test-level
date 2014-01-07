@@ -55,9 +55,10 @@ class QuestionsController extends BaseController {
 
 		if ($validation->passes())
 		{
-			$this->question->create($input);
-
-			// return Redirect::route('questions.index');
+			$test = Test::find($input['test_id']);
+			unset($input['test_id']);
+			$question = new Question($input);
+			$test->questions()->save($question);
 			return Response::json($input, 200);
 		}
 		$messages = $validation->errors()->toArray();
