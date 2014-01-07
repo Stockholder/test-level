@@ -1,12 +1,9 @@
-@extends('layouts.scaffold')
+@extends('layouts.alternate')
 
 @section('main')
 
-<h1>All Alternatives</h1>
-
-<p>{{ link_to_route('alternatives.create', 'Add new alternative') }}</p>
-
 @if ($alternatives->count())
+	<h4>All Alternatives</h4>
 	<table class="table table-striped table-bordered">
 		<thead>
 			<tr>

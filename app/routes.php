@@ -34,3 +34,10 @@ Route::get('questions/showByTest/{id}', function($id)
 	$questions = $test->questions;
 	return View::make('questions.index', compact('questions'));
 });
+
+Route::get('alternatives/showByQuestion/{id}', function($id)
+{
+	$question =Question::find($id);
+	$alternatives = $question->alternatives;
+	return View::make('alternatives.index', compact('alternatives'));
+});
