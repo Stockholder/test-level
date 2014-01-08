@@ -48,15 +48,18 @@ class AlternativesController extends BaseController {
 
 		if ($validation->passes())
 		{
-			$this->alternative->create($input);
-
-			return Redirect::route('alternatives.index');
+			$question = Question::find($input['question_id']);
+			unset($input['question_id']);
+			$alternative = new Alternative($input);
+			$question->alternatives()->save($alternative);
+			return Response::json($input, 200);
 		}
-
-		return Redirect::route('alternatives.create')
-			->withInput()
-			->withErrors($validation)
-			->with('message', 'There were validation errors.');
+		$messages = $validation->errors()->toArray();
+		return Response::json($messages, 400);
+		// return Redirect::route('alternatives.create')
+		// 	->withInput()
+		// 	->withErrors($validation)
+		// 	->with('message', 'There were validation errors.');
 	}
 
 	/**

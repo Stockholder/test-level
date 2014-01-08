@@ -56,87 +56,83 @@
 				loadAlternatives.show();
 			}
 		});
+	
 	});
 
-		// $('.addQuestion').click(function(event) {
-		// 	var test_id = $(this).data('id');
-		// 	$('#myModal').data('id', test_id);
-		// });
+		$('.addAlternative').click(function(event) {
+			var question_id = $(this).data('id');
+			$('#myModalAlternative').data('id', question_id);
+		});
 
-		// //Modal
-		// $('#myModal').on('shown', function() {
+		//Modal
+		$('#myModalAlternative').on('shown', function() {
 
-		// });
+		});
 
-		// $('#myModal').on('hidden', function() {
-		// 	$('#myModal').modal('hide');
-		// 	$('#errors').html('');
-		// 	$('#formQuestion')[0].reset();
-		// });
+		$('#myModalAlternative').on('hidden', function() {
+			$('#myModalAlternative').modal('hide');
+			$('#errors').html('');
+			$('#formAlternative')[0].reset();
+		});
 
-	// 	//Save questions
-	// 	$("#saveQuestion").bind('click',function () {
-	// 		var form = $('#formQuestion');
-	// 		var data = form.serialize();
-	// 		var method = form.attr('method');
-	// 		var url = form.attr('action');
-	// 		var test_id = $('#myModal').data('id');
-	// 		var loadQuestions = $('.loadQuestions[data-id="'+test_id+'"]');
+		//Save questions
+		$("#saveAlternative").bind('click',function () {
+			var form = $('#formAlternative');
+			var data = form.serialize();
+			var method = form.attr('method');
+			var url = form.attr('action');
+			var question_id = $('#myModalAlternative').data('id');
+			var loadAlternatives = $('.loadAlternatives[data-id="'+question_id+'"]');
 
-	// 		data = data+'&test_id='+test_id;
+			data = data+'&question_id='+question_id;
 			
-	// 		$.ajax({
-	// 			type: method,
-	// 			url: url,
-	// 			data: data
-	// 		}).success(function(s) {
-	// 			$('#myModal').modal('toggle');
-	// 			$('.showQuestions[data-id="'+test_id+'"]').html('Ocultar questões');
-	// 			loadQuestions.html('');
-	// 			loadQuestions.append($('<div style="text-align:center"><img src="http://ri.magazineluiza.com.br/rao2012/images/loader.gif" width="100" height="100"/></div>'));
-	// 			setTimeout(function(){
-	// 				loadQuestions.load('{{ URL::to('/'); }}/questions/showByTest/'+test_id);
-	// 			},1000);
+			$.ajax({
+				type: method,
+				url: url,
+				data: data
+			}).success(function(s) {
+				$('#myModalAlternative').modal('toggle');
+				$('.showAlternatives[data-id="'+question_id+'"]').html('Ocultar questões');
+				loadAlternatives.html('');
+				loadAlternatives.append($('<div style="text-align:center"><img src="http://ri.magazineluiza.com.br/rao2012/images/loader.gif" width="100" height="100"/></div>'));
+				setTimeout(function(){
+					loadAlternatives.load('{{ URL::to('/'); }}/alternatives/showByQuestion/'+question_id);
+				},1000);
 				
-	// 			loadQuestions.show();
-	// 		}).error(function(e) {
-	// 			if(e.status != 400){
-	// 				alert('Ocorreu um erro interno, favor consultar o administrador');
-	// 			}else{
-	// 				$('#errors').html('');
-	// 				var errorMessage = JSON.parse(e.responseText);
-	// 				var errorPlace = document.createElement('ul');
-	// 				errorPlace = $(errorPlace).addClass('errorPlace');
-	// 				$.each(errorMessage, function(index, val) {
-	// 					$('#errors').append('<li class="error">'+val+'</li>');
-	// 				});
-	// 			}
-	// 		}).done(function( data ) {
-	// 			// console.log('done',data);
- //  			})
-	// 	});
+				loadAlternatives.show();
+			}).error(function(e) {
+				if(e.status != 400){
+					alert('Ocorreu um erro interno, favor consultar o administrador');
+				}else{
+					$('#errors').html('');
+					var errorMessage = JSON.parse(e.responseText);
+					var errorPlace = document.createElement('ul');
+					errorPlace = $(errorPlace).addClass('errorPlace');
+					$.each(errorMessage, function(index, val) {
+						$('#errors').append('<li class="error">'+val+'</li>');
+					});
+				}
+			}).done(function( data ) {
+				// console.log('done',data);
+  			})
+		});
 
 	// });
 </script>
 
 <!-- Modal -->
-<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="myModalAlternative" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 		<h3 id="myModalLabel">Create Question</h3>
 	</div>
 	<div class="modal-body">
-		<p>
-			{{ Form::open(array('route' => 'questions.store', 'id' => 'formQuestion')) }}
+		<p>  
+			{{ Form::open(array('route' => 'alternatives.store', 'id' => 'formAlternative')) }}
 				<ul>
 					<li>
-						{{ Form::label('description', 'Description:') }}
-						{{ Form::text('description') }}
-					</li>
-
-					<li>
-						{{ Form::label('audio_id', 'Audio_id:') }}
-						{{ Form::input('number', 'audio_id') }}
+					{{ Form::label('description', 'Description:') }}
+					{{ Form::text('description') }}
 					</li>
 				</ul>
 			{{ Form::close() }}
@@ -145,7 +141,7 @@
 	</div>
 	<div class="modal-footer">
 		<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-		<button class="btn btn-primary" id="saveQuestion">Save changes</button>
+		<button class="btn btn-primary" id="saveAlternative">Save changes</button>
 	</div>
 </div>
 

@@ -41,3 +41,16 @@ Route::get('alternatives/showByQuestion/{id}', function($id)
 	$alternatives = $question->alternatives;
 	return View::make('alternatives.index', compact('alternatives'));
 });
+
+Route::post('alternatives/changeCorrect', function()
+{
+	$input = Input::all();
+	DB::table('alternative_question')
+            ->where('question_id', $input['question_id'])
+            ->update(array('correct' => 0));
+
+            DB::table('alternative_question')
+            ->where('alternative_id', $input['alternative_id'])
+            ->update(array('correct' => 1));
+	return Response::json($input, 200);
+});
