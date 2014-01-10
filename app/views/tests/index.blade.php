@@ -76,6 +76,7 @@
 		});
 
 		$('.addQuestion').click(function(event) {
+			$('#myModalLabelQuestion').html("Criar questão");
 			var test_id = $(this).data('id');
 			$('#myModal').data('id', test_id);
 		});
@@ -89,6 +90,7 @@
 			$('#myModal').modal('hide');
 			$('#errors').html('');
 			$('#formQuestion')[0].reset();
+			$('#myModal').removeData('question_id');
 		});
 
 		//Save questions
@@ -99,8 +101,15 @@
 			var url = form.attr('action');
 			var test_id = $('#myModal').data('id');
 			var loadQuestions = $('.loadQuestions[data-id="'+test_id+'"]');
-
-			data = data+'&test_id='+test_id;
+			
+			
+			if(typeof($('#myModal').data('question_id')) != 'undefined' ){
+				var question_id =  $('#myModal').data('question_id') ;
+				data = data+'&test_id='+test_id+'&_method=PATCH';
+				url = '{{ URL::to('/'); }}/questions/'+question_id;
+			}else{
+				data = data+'&test_id='+test_id;
+			}
 			
 			$.ajax({
 				type: method,
@@ -140,7 +149,7 @@
 <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-		<h3 id="myModalLabel">Create Question</h3>
+		<h3 id="myModalLabelQuestion">Create Question</h3>
 	</div>
 	<div class="modal-body">
 		<p>

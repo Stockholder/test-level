@@ -108,21 +108,30 @@ class QuestionsController extends BaseController {
 	 */
 	public function update($id)
 	{
-		$input = array_except(Input::all(), '_method');
+		$input = array_except(Input::all(), array('_method','_token'));
 		$validation = Validator::make($input, Question::$rules);
-
 		if ($validation->passes())
 		{
-			$question = $this->question->find($id);
-			$question->update($input);
-
-			return Redirect::route('questions.show', $id);
+			$test = Test::find($input['test_id']);
+			unset($input['test_id']);
+			$input['description'] = $input['description'];
+			$test->questions()->update($input);
+			return Response::json($input, 200);
 		}
+		$messages = $validation->errors()->toArray();
+		return Response::json($messages, 400);
+		// if ($validation->passes())
+		// {
+		// 	$question = $this->question->find($id);
+		// 	$question->update($input);
 
-		return Redirect::route('questions.edit', $id)
-			->withInput()
-			->withErrors($validation)
-			->with('message', 'There were validation errors.');
+		// 	return Redirect::route('questions.show', $id);
+		// }
+
+		// return Redirect::route('questions.edit', $id)
+		// 	->withInput()
+		// 	->withErrors($validation)
+		// 	->with('message', 'There were validation errors.');
 	}
 
 	/**
