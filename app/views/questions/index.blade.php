@@ -84,7 +84,7 @@
 
 	$('#myModalAlternative').on('hidden', function() {
 		$('#myModalAlternative').modal('hide');
-		$('#errors').html('');
+		$('.errors').html('');
 		$('#formAlternative')[0].reset();
 	});
 
@@ -117,12 +117,12 @@
 			if(e.status != 400){
 				alert('Ocorreu um erro interno, favor consultar o administrador');
 			}else{
-				$('#errors').html('');
+				$('.errors').html('');
 				var errorMessage = JSON.parse(e.responseText);
 				var errorPlace = document.createElement('ul');
 				errorPlace = $(errorPlace).addClass('errorPlace');
 				$.each(errorMessage, function(index, val) {
-					$('#errors').append('<li class="error">'+val+'</li>');
+					$('.errors').append('<li class="error">'+val+'</li>');
 				});
 			}
 		}).done(function( data ) {
@@ -149,7 +149,7 @@
 					</li>
 				</ul>
 			{{ Form::close() }}
-			<ul id="errors"></ul>
+			<ul class="errors"></ul>
 		</p>
 	</div>
 	<div class="modal-footer">
