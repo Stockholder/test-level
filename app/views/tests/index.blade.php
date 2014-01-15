@@ -91,6 +91,8 @@
 			$('.errors').html('');
 			$('#formQuestion')[0].reset();
 			$('#myModal').removeData('question_id');
+			$('input[name=path]').val('');
+			$('audio.audioQuestion').html('');
 		});
 
 		//Save questions
@@ -167,7 +169,7 @@
 							</span>
 							<br>
 							<br>
-							<audio controls="controls">
+							<audio class="audioQuestion" controls="controls">
 							</audio>
 						</p>
 						<style type="text/css">

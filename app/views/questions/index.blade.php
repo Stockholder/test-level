@@ -16,7 +16,11 @@
 			<tbody>
 				<tr>
 					<td>{{{ $question->description }}}</td>
-					<td>{{{ $question->audio_id }}}</td>
+					<td>
+						<audio controls="controls">
+							<source src="data:audio/mp3;base64,{{{ Audio::find($question->audio_id)->path }}}"/>
+						</audio>
+					</td>
 					<td>
 						<a href="#myModalAlternative" role="button" class="btn addAlternative" data-toggle="modal" data-id="{{ $question->id }}">Adicionar alternativas</a>
 						<a class="btn showAlternatives" data-id="{{ $question->id }}">Mostrar alternativas</a>
