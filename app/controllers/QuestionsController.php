@@ -56,9 +56,17 @@ class QuestionsController extends BaseController {
 		if ($validation->passes())
 		{
 			$test = Test::find($input['test_id']);
-			unset($input['test_id']);
+			$audio_path = array('path',$input['path']);
+			unset($input['test_id'],$input['path']);
+			print_r($audio_path);
+			exit;
+			$audio = new Audio($audio_path);
+			// $audio->save();
+			// $input['audio_id'] = DB::getPdo()->lastInsertId();
 			$question = new Question($input);
 			$test->questions()->save($question);
+			print_r(DB::getQueryLog());
+			exit;
 			return Response::json($input, 200);
 		}
 		$messages = $validation->errors()->toArray();

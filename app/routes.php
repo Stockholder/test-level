@@ -54,3 +54,5 @@ Route::post('alternatives/changeCorrect', function()
             ->update(array('correct' => 1));
 	return Response::json($input, 200);
 });
+
+Route::resource('audio', 'AudioController');

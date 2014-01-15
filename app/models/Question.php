@@ -5,7 +5,7 @@ class Question extends Eloquent {
 
 	public static $rules = array(
 		'description' => 'required',
-		'audio_id' => 'required'
+		'path' => 'required'
 	);
 
 	public function alternatives()

@@ -159,10 +159,57 @@
 						{{ Form::label('description', 'Description:') }}
 						{{ Form::text('description') }}
 					</li>
-
 					<li>
-						{{ Form::label('audio_id', 'Audio_id:') }}
-						{{ Form::input('number', 'audio_id') }}
+						{{ Form::hidden('path') }}
+						<p>
+							<span class="btn btn-default btn-file">
+								Selecionar audio <input class="btn btn-primary" type="file" id="myaudio"/>
+							</span>
+							<br>
+							<br>
+							<audio controls="controls">
+							</audio>
+						</p>
+						<style type="text/css">
+							.btn-file {
+							    position: relative;
+							    overflow: hidden;
+							}
+							.btn-file input[type=file] {
+							    position: absolute;
+							    top: 0;
+							    right: 0;
+							    min-width: 100%;
+							    min-height: 100%;
+							    font-size: 999px;
+							    text-align: right;
+							    filter: alpha(opacity=0);
+							    opacity: 0;
+							    background: red;
+							    cursor: inherit;
+							    display: block;
+							}
+						</style>
+						<script type="text/javascript">
+						$(document).ready(function(){
+							$("#myaudio").change(function(){
+								var audio = $("input[type='file']").get(0).files[0];
+								readFile(audio, function(e) {
+								var result = e.target.result;  // here I get a binary string of my original audio file
+								encodedData = btoa(result);  // encode it to base64
+								$("audio").html("<source src=\"data:audio/mp3;base64,"+encodedData+"\"/>");    //add the source to audio
+								$('input[name=path]').val(encodedData);
+								});
+							});
+
+						});
+
+						function readFile(file, onLoadCallback){
+							var reader = new FileReader();
+							reader.onload = onLoadCallback;
+							reader.readAsBinaryString(file);
+						}
+						</script>
 					</li>
 				</ul>
 			{{ Form::close() }}
