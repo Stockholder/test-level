@@ -17,4 +17,5 @@ class Question extends Eloquent {
 	{
 		return $this->belongsToMany('Test', 'question_test');
 	}
+
 }

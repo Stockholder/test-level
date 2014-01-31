@@ -33,7 +33,7 @@
 						@endif
 					</td>
 					<td>
-						<a href="#myModal" role="button" class="btn addQuestion" data-toggle="modal" data-id="{{ $test->id }}">Adicionar questões</a>
+						<button role="button" class="btn addQuestion" data-toggle="modal" data-id="{{ $test->id }}">Adicionar questões</button>
 						<a class="btn showQuestions" data-id="{{ $test->id }}">Mostrar questões</a>
 					</td>
 					<td>{{ link_to_route('tests.edit', 'Edit', array($test->id), array('class' => 'btn btn-info')) }}</td>
@@ -55,96 +55,7 @@
 @endif
 
 <script>
-	$(function () {
-		//Show questions
-		$('.showQuestions').click(function(){
-			var test_id = $(this).data('id');
-			var loadQuestions = $('.loadQuestions[data-id="'+test_id+'"]');
-			if(loadQuestions.is(':visible')){
-				loadQuestions.hide();
-				$(this).html('Mostrar questões');
-			}else{
-				$(this).html('Ocultar questões');
-				loadQuestions.html('');
-				loadQuestions.append($('<div style="text-align:center"><img src="http://ri.magazineluiza.com.br/rao2012/images/loader.gif" width="100" height="100"/></div>'));
-				setTimeout(function(){
-					loadQuestions.load('{{ URL::to('/'); }}/questions/showByTest/'+test_id);
-				},1000);
-				
-				loadQuestions.show();
-			}
-		});
 
-		$('.addQuestion').click(function(event) {
-			$('#myModalLabelQuestion').html("Criar questão");
-			var test_id = $(this).data('id');
-			$('#myModal').data('id', test_id);
-		});
-
-		//Modal
-		$('#myModal').on('shown', function() {
-
-		});
-
-		$('#myModal').on('hidden', function() {
-			$('#myModal').modal('hide');
-			$('.errors').html('');
-			$('#formQuestion')[0].reset();
-			$('#myModal').removeData('question_id');
-			$('input[name=path]').val('');
-			$('audio.audioQuestion').html('');
-		});
-
-		//Save questions
-		$("#saveQuestion").bind('click',function () {
-			var form = $('#formQuestion');
-			var data = form.serialize();
-			var method = form.attr('method');
-			var url = form.attr('action');
-			var test_id = $('#myModal').data('id');
-			var loadQuestions = $('.loadQuestions[data-id="'+test_id+'"]');
-			
-			
-			if(typeof($('#myModal').data('question_id')) != 'undefined' ){
-				var question_id =  $('#myModal').data('question_id') ;
-				data = data+'&test_id='+test_id+'&_method=PATCH';
-				url = '{{ URL::to('/'); }}/questions/'+question_id;
-			}else{
-				data = data+'&test_id='+test_id;
-			}
-			
-			$.ajax({
-				type: method,
-				url: url,
-				data: data
-			}).success(function(s) {
-				$('#myModal').modal('toggle');
-				$('.showQuestions[data-id="'+test_id+'"]').html('Ocultar questões');
-				loadQuestions.html('');
-				loadQuestions.append($('<div style="text-align:center"><img src="http://ri.magazineluiza.com.br/rao2012/images/loader.gif" width="100" height="100"/></div>'));
-				setTimeout(function(){
-					loadQuestions.load('{{ URL::to('/'); }}/questions/showByTest/'+test_id);
-				},1000);
-				
-				loadQuestions.show();
-			}).error(function(e) {
-				if(e.status != 400){
-					alert('Ocorreu um erro interno, favor consultar o administrador');
-				}else{
-					$('.errors').html('');
-					var errorMessage = JSON.parse(e.responseText);
-					var errorPlace = document.createElement('ul');
-					errorPlace = $(errorPlace).addClass('errorPlace');
-					$.each(errorMessage, function(index, val) {
-						$('.errors').append('<li class="error">'+val+'</li>');
-					});
-				}
-			}).done(function( data ) {
-				// console.log('done',data);
-  			})
-		});
-
-	});
 </script>
 
 <!-- Modal -->
@@ -169,8 +80,10 @@
 							</span>
 							<br>
 							<br>
-							<audio class="audioQuestion" controls="controls">
-							</audio>
+							<div class="audioPathEdit">
+								<audio class="audioQuestion" controls="controls">
+								</audio>
+							</div>
 						</p>
 						<style type="text/css">
 							.btn-file {
@@ -192,26 +105,6 @@
 							    display: block;
 							}
 						</style>
-						<script type="text/javascript">
-						$(document).ready(function(){
-							$("#myaudio").change(function(){
-								var audio = $("input[type='file']").get(0).files[0];
-								readFile(audio, function(e) {
-								var result = e.target.result;  // here I get a binary string of my original audio file
-								encodedData = btoa(result);  // encode it to base64
-								$("audio").html("<source src=\"data:audio/mp3;base64,"+encodedData+"\"/>");    //add the source to audio
-								$('input[name=path]').val(encodedData);
-								});
-							});
-
-						});
-
-						function readFile(file, onLoadCallback){
-							var reader = new FileReader();
-							reader.onload = onLoadCallback;
-							reader.readAsBinaryString(file);
-						}
-						</script>
 					</li>
 				</ul>
 			{{ Form::close() }}

@@ -116,10 +116,10 @@ class QuestionsController extends BaseController {
 		$validation = Validator::make($input, Question::$rules);
 		if ($validation->passes())
 		{
-			$test = Test::find($input['test_id']);
-			unset($input['test_id']);
-			$input['description'] = $input['description'];
-			$test->questions()->update($input);
+			$question = Question::find($id);
+			$audio = Audio::find($question->audio_id);
+			$audio->update(array('path' => $input['path']));
+			$question->update(array('description' => $input['description']));
 			return Response::json($input, 200);
 		}
 		$messages = $validation->errors()->toArray();

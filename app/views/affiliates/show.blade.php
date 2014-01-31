@@ -16,12 +16,14 @@
 	<tbody>
 		<tr>
 			<td>{{{ $affiliate->city }}}</td>
-                    <td>{{ link_to_route('affiliates.edit', 'Edit', array($affiliate->id), array('class' => 'btn btn-info')) }}</td>
-                    <td>
-                        {{ Form::open(array('method' => 'DELETE', 'route' => array('affiliates.destroy', $affiliate->id))) }}
-                            {{ Form::submit('Delete', array('class' => 'btn btn-danger')) }}
-                        {{ Form::close() }}
-                    </td>
+			<td>
+				{{ link_to_route('affiliates.edit', 'Edit', array($affiliate->id), array('class' => 'btn btn-info')) }}
+			</td>
+			<td>
+				{{ Form::open(array('method' => 'DELETE', 'route' => array('affiliates.destroy', $affiliate->id))) }}
+					{{ Form::submit('Delete', array('class' => 'btn btn-danger')) }}
+				{{ Form::close() }}
+			</td>
 		</tr>
 	</tbody>
 </table>

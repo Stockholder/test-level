@@ -38,31 +38,5 @@
 @else
 	There are no alternatives
 @endif
-<script type="text/javascript">
-	$('.changeCorrect').click(function(event) {
-		var option = $(this).data('option');
-		var alternative_id = $(this).data('id');
-		var question_id = $(this).data('question');
-		var url = '{{ URL::to('/'); }}/alternatives/changeCorrect';
-		var method = 'POST';
-		var data = {'alternative_id' : alternative_id, 'option' : option, 'question_id': question_id };
-		var loadAlternatives = $('.loadAlternatives[data-id="'+question_id+'"]');
-		$.ajax({
-			type: method,
-			url: url,
-			data: data
-		}).success(function(s) {
-			loadAlternatives.html('');
-			loadAlternatives.append($('<div style="text-align:center"><img src="http://ri.magazineluiza.com.br/rao2012/images/loader.gif" width="100" height="100"/></div>'));
-			setTimeout(function(){
-				loadAlternatives.load('{{ URL::to('/'); }}/alternatives/showByQuestion/'+question_id);
-			},1000);
-		}).error(function(e) {
-			alert('Ocorreu um erro interno, favor consultar o administrador');
-		}).done(function( data ) {
 
-		});
-	});
-
-</script>
 @stop
