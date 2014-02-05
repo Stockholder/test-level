@@ -28,6 +28,8 @@ Route::resource('questions', 'QuestionsController');
 
 Route::resource('alternatives', 'AlternativesController');
 
+Route::resource('audio', 'AudioController');
+
 Route::get('questions/showByTest/{id}', function($id)
 {
 	$test =Test::find($id);
@@ -55,4 +57,25 @@ Route::post('alternatives/changeCorrect', function()
 	return Response::json($input, 200);
 });
 
-Route::resource('audio', 'AudioController');
+Route::get('inicio', function()
+{
+	$languages = Language::all();
+	$result = array();
+	for ($i=0; $i < count($languages); $i++) { 
+		$result['languages'][] = $languages[$i]->language;
+	}
+
+	$filiais = Affiliate::all();
+	for ($i=0; $i < count($filiais); $i++) { 
+		$result['affiliates'][] = $filiais[$i]->city;
+	}
+	return View::make('inicio.index')
+		->with('languages', $result['languages'])
+		->with('affiliates',$result['affiliates']);
+});
+
+Route::post('processando', 'ExameController@processing');
+Route::get('exame', 'ExameController@exame');
+Route::post('exame', 'ExameController@exame');
+Route::get('fim', 'ExameController@fim');
+Route::post('detectSession', 'ExameController@detectSession');

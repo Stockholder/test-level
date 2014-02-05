@@ -19,8 +19,8 @@ class Test extends Eloquent {
 		return $this->belongsTo('Affiliate');
 	}
     
-    	public function questions()
-    	{
-        		return $this->belongsToMany('Question', 'question_test');
-    	}
+	public function questions()
+	{
+		return $this->belongsToMany('Question', 'question_test');
+	}
 }
