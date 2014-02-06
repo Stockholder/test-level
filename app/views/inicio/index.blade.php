@@ -15,7 +15,7 @@
           <br>
           {{ Form::text('email', null, array('placeholder'=>'Email')) }}
           <br>
-          {{ Form::text('telefone', null, array('placeholder'=>'Telefone')) }}
+          {{ Form::text('phone', null, array('placeholder'=>'Telefone')) }}
           <br>
           {{ Form::select('idioma', array_merge(array(0 => 'Selecione o idioma'),$languages), 0);}}
           <br>

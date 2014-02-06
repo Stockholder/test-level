@@ -9,11 +9,20 @@ class ExameController extends BaseController {
 	 */
 	public function processing()
 	{
+
+		$user = new Student;
+
+		$user->name = Input::get('name');
+		$user->email = Input::get('email');
+		$user->phone = Input::get('phone');
+
+		$user->save();
+
 		Session::flush();
 		Session::regenerate();
 
 		$exam = array();
-		
+		$exam['user']['id'] = $user->id;
 		$language = Language::find(Input::get('idioma'));
 		$filial = Affiliate::find(Input::get('filial'));
 		$test = Test::where('languages_id',$language->id)->where('active',1)->first();
@@ -59,6 +68,7 @@ class ExameController extends BaseController {
 				return Redirect::to('inicio');
 		if (Request::isMethod('post'))
 		{
+			$testes['user']['alternatives'][] = Input::get('alternative');
 			$testes['respondidas']++;
 			$first = key($testes['questions']);
 			unset($testes['questions'][$first]);
@@ -73,6 +83,16 @@ class ExameController extends BaseController {
 
 	public function fim()
 	{
+		$user = Session::get('testes');
+		$countCorrect = 0;
+		foreach ($user['user']['alternatives'] as $key => $value) {
+			$results = DB::select('select * from alternative_question where alternative_id = ?', array($value));
+			if($results[0]->correct == 1){
+				$countCorrect = $countCorrect+1;
+			}
+				
+			DB::table('alternative_student')->insert(array('alternative_id' => $value, 'student_id' => $user['user']['id']));
+		}
 		Session::flush();
 		return View::make('fim.index');
 	}

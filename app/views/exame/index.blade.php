@@ -72,7 +72,7 @@
             <tr>
               <td>
                 <p class="clearfix"> 
-                  {{ Form::radio('question', $value['id']); }}
+                  {{ Form::radio('alternative', $value['id']); }}
                   <label>{{ $value['description'] }}</label>
                 </p>
               </td>
