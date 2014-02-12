@@ -84,17 +84,16 @@ class ExameController extends BaseController {
 	public function fim()
 	{
 		$user = Session::get('testes');
-		$countCorrect = 0;
-		foreach ($user['user']['alternatives'] as $key => $value) {
-			$results = DB::select('select * from alternative_question where alternative_id = ?', array($value));
-			if($results[0]->correct == 1){
-				$countCorrect = $countCorrect+1;
+		if(isset($user)){
+			$countCorrect = 0;
+			foreach ($user['user']['alternatives'] as $key => $value) {
+				DB::table('alternative_student')->insert(array('alternative_id' => $value, 'student_id' => $user['user']['id']));
 			}
-				
-			DB::table('alternative_student')->insert(array('alternative_id' => $value, 'student_id' => $user['user']['id']));
+			Session::flush();
+			return View::make('fim.index');
+		}else{
+			return Redirect::to('inicio');
 		}
-		Session::flush();
-		return View::make('fim.index');
 	}
 
 	public function detectSession()
