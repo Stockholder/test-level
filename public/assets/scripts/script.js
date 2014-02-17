@@ -77,14 +77,45 @@ $(document).ready(function() {
 	});
 
 	$("#myaudio").change(function(){
-		var audio = $("input[type='file']").get(0).files[0];
-		readFile(audio, function(e) {
-			var result = e.target.result;  // here I get a binary string of my original audio file
-			encodedData = btoa(result);  // encode it to base64
-			encodedData = "data:audio/mp3;base64,"+encodedData;
-			$("audio").html("<source src=\""+encodedData+"\"/>");    //add the source to audio
-			$('input[name=path]').val(encodedData);
-		});
+		// var audio = $("input[type='file']").get(0).files[0];
+		// readFile(audio, function(e) {
+		// 	var result = e.target.result;  // here I get a binary string of my original audio file
+		// 	encodedData = btoa(result);  // encode it to base64
+		// 	encodedData = "data:audio/mp3;base64,"+encodedData;
+		// 	$("audio").html("<source src=\""+encodedData+"\"/>");    //add the source to audio
+		// 	$('input[name=path]').val(encodedData);
+		// });
+        var file = this.files[0];
+        var name = file.name;
+        var size = file.size;
+        var type = file.type;
+        //Your validation
+        var formData = new FormData($('#form_files')[0]);
+        $.ajax({
+            url: APP_URL+'/uploadFile',  //Server script to process data
+            type: 'POST',
+            xhr: function() {  // Custom XMLHttpRequest
+                var myXhr = $.ajaxSettings.xhr();
+                if(myXhr.upload){ // Check if upload property exists
+                    myXhr.upload.addEventListener('progress',progressHandlingFunction, false); // For handling the progress of the upload
+                }
+                return myXhr;
+            },
+            //Ajax events
+            success: function(e){
+                $('#formQuestion input[name=path]').val(e);
+                $("audio").html("<source src=\""+APP_URL+'/assets/uploads/tmp_'+e+"\"/>"); 
+            },
+            error: function(e){
+                alert('Ocorreu um erro ao realizar o upload, favor consultar o adminstrador');
+            },
+            // Form data
+            data: formData,
+            //Options to tell jQuery not to process data or worry about content-type.
+            cache: false,
+            contentType: false,
+            processData: false
+        });
 	});
 
 	$('.editQuestion').click(function(event) {
@@ -99,7 +130,7 @@ $(document).ready(function() {
 		$('#myModal').data('question_id', question_id);
 		$('.audioPathEdit').html('');
  		$(this).parent().parent().parent().find('.audioPath').clone().appendTo('.audioPathEdit');
- 		$('input[name=path]').val($('.audioPathEdit').children('.audioPath').children().attr('src'));
+ 		$('input[name=path]').val($(this).data('path'));
 		$('#myModal').modal('show');
 	});
 
@@ -197,6 +228,12 @@ $(document).ready(function() {
 	});
 
 });
+
+function progressHandlingFunction(e){
+    if(e.lengthComputable){
+        $('progress').attr({value:e.loaded,max:e.total});
+    }
+}
 
 function questionsReload(element) {
 	var test_id = element.data('id');

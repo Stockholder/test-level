@@ -56,6 +56,7 @@ class QuestionsController extends BaseController {
 		if ($validation->passes())
 		{
 			$test = Test::find($input['test_id']);
+			rename('/Applications/MAMP/htdocs/test-level/public/assets/uploads/tmp_'.$input['path'], '/Applications/MAMP/htdocs/test-level/public/assets/uploads/'.$input['path']);
 			$audio_path = array('path' =>$input['path']);
 			unset($input['test_id'],$input['path']);
 			$audio = new Audio($audio_path);
@@ -118,6 +119,7 @@ class QuestionsController extends BaseController {
 		{
 			$question = Question::find($id);
 			$audio = Audio::find($question->audio_id);
+			rename('/Applications/MAMP/htdocs/test-level/public/assets/uploads/tmp_'.$input['path'], '/Applications/MAMP/htdocs/test-level/public/assets/uploads/'.$input['path']);
 			$audio->update(array('path' => $input['path']));
 			$question->update(array('description' => $input['description']));
 			return Response::json($input, 200);
@@ -149,6 +151,19 @@ class QuestionsController extends BaseController {
 		$this->question->find($id)->delete();
 
 		return Redirect::route('questions.index');
+	}
+
+	public function uploadFile()
+	{
+		$response = array();
+		if(move_uploaded_file($_FILES['file']['tmp_name'], '/Applications/MAMP/htdocs/test-level/public/assets/uploads/tmp_'.strtotime(date('YmdHmi')).'_'.$_FILES['file']['name'])){
+			$response['text'] = strtotime(date('YmdHmi')).'_'.$_FILES['file']['name'];
+			$response['status'] = 200;
+		}else{
+			$response['text'] = 'Ocorreu um erro, favor consultar o administrador';
+			$response['status']= 400;
+		}
+		return Response::json($response['text'], $response['status']);
 	}
 
 }

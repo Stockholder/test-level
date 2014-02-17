@@ -63,7 +63,7 @@
         <tr>
           <td>
             <audio class="audioPath" controls="controls">
-              <source src="{{{ Audio::find($testes['questions'][$first]['question']['audio'])->path }}}"/>
+              <source src='{{ asset("assets/uploads/".Audio::find($testes['questions'][$first]['question']['audio'])->path) }}'/>
             </audio>
           </td>
         </tr>

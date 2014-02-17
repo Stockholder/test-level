@@ -18,7 +18,7 @@
 					<td>{{{ $question->description }}}</td>
 					<td>
 						<audio class="audioPath" controls="controls">
-							<source src="{{{ Audio::find($question->audio_id)->path }}}"/>
+							<source src='{{ asset("assets/uploads/".Audio::find($question->audio_id)->path) }}'/>
 						</audio>
 					</td>
 					<td>
@@ -26,7 +26,7 @@
 						<a class="btn showAlternatives" data-id="{{ $question->id }}">Mostrar alternativas</a>
 					</td>
 					<td>
-						<a href="#myModal" role="button" class="btn editQuestion" data-toggle="modal" data-id="{{ $question->id }}" data-description="{{{ $question->description }}}" data-audio="{{{ $question->audio_id }}}">Editar questão</a>
+						<a href="#myModal" role="button" class="btn editQuestion" data-toggle="modal" data-id="{{ $question->id }}" data-description="{{{ $question->description }}}" data-audio="{{{ $question->audio_id }}}" data-path="{{{ Audio::find($question->audio_id)->path }}}">Editar questão</a>
 					</td>
 					<td>
 						{{ Form::open(array('method' => 'DELETE', 'route' => array('questions.destroy', $question->id))) }}

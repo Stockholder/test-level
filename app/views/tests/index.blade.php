@@ -1,6 +1,26 @@
 @extends('layouts.scaffold')
 
 @section('main')
+<style type="text/css">
+	.btn-file {
+	    position: relative;
+	    overflow: hidden;
+	}
+	.btn-file input[type=file] {
+	    position: absolute;
+	    top: 0;
+	    right: 0;
+	    min-width: 100%;
+	    min-height: 100%;
+	    font-size: 999px;
+	    text-align: right;
+	    filter: alpha(opacity=0);
+	    opacity: 0;
+	    background: red;
+	    cursor: inherit;
+	    display: block;
+	}
+</style>
 
 <h1>All Tests</h1>
 
@@ -59,6 +79,7 @@
 </script>
 
 <!-- Modal -->
+<?php /*
 <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -108,6 +129,40 @@
 					</li>
 				</ul>
 			{{ Form::close() }}
+			<ul class="errors"></ul>
+		</p>
+	</div>
+
+	*/?>
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		<h3 id="myModalLabelQuestion">Create Question</h3>
+	</div>
+	<div class="modal-body">
+		<p>
+			{{ Form::open(array('route' => 'questions.store', 'id' => 'formQuestion')) }}
+				<ul>
+					<li>
+						{{ Form::label('description', 'Description:') }}
+						{{ Form::text('description') }}
+					</li>
+					<li>
+						{{ Form::hidden('path') }}
+					</li>
+				</ul>
+			{{ Form::close() }}
+
+			{{ Form::open(array( 'id' => 'form_files', 'enctype' => 'multipart/form-data')) }}
+				<span class="btn btn-default btn-file">
+					Selecionar audio <input class="btn btn-primary" name="file" type="file" id="myaudio"/>
+				</span>
+				<br /> 
+				<progress></progress>
+			{{ Form::close() }}
+			<div class="audioPathEdit">
+				<audio class="audioQuestion" controls="controls"></audio>
+			</div>
 			<ul class="errors"></ul>
 		</p>
 	</div>

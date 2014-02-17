@@ -79,3 +79,4 @@ Route::get('exame', 'ExameController@exame');
 Route::post('exame', 'ExameController@exame');
 Route::get('fim', 'ExameController@fim');
 Route::post('detectSession', 'ExameController@detectSession');
+Route::post('uploadFile', 'QuestionsController@uploadFile');
